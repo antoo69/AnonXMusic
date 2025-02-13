@@ -1,14 +1,15 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
-# Pastikan LOG_GROUP_ID diganti dengan LOGGER_ID jika sudah diganti di config.py
-from config import LOGGER_ID, LOG
+from config import LOGGER_ID, LOG  # Menggunakan LOGGER_ID
 from AnonXMusic import app
 from AnonXMusic.utils.database import delete_served_chat, get_assistant
 from html import escape
 
 async def is_on_off(log_status):
-    return bool(getattr(log_status, "value", False))  # Hindari error jika LOG None
+    log_value = getattr(log_status, "value", log_status)  # Hindari None
+    print(f"LOG value at runtime: {log_value}")  # Debugging
+    return bool(log_value)
 
 @app.on_message(filters.new_chat_members)
 async def join_watcher(_, message: Message):
@@ -29,15 +30,9 @@ async def join_watcher(_, message: Message):
                 print("Bot added to a new group.")
                 count = await app.get_chat_members_count(chat.id)
                 username = message.chat.username if message.chat.username else "Private Chat"
-                added_by = (
-                    message.from_user.mention
-                    if message.from_user
-                    else "Unknown User"
-                )
+                added_by = message.from_user.mention if message.from_user else "Unknown User"
 
-                # Validasi URL dengan fallback jika user.id None
                 button_url = f"tg://user?id={message.from_user.id}" if message.from_user else "#"
-
                 chat_username = f"@{message.chat.username}" if message.chat.username else "no username"
 
                 msg = (
@@ -49,9 +44,8 @@ async def join_watcher(_, message: Message):
                     f"**Added By:** {added_by}"
                 )
 
-                # Kirim pesan log dengan tombol
                 await app.send_message(
-                    LOGGER_ID,  # Ganti LOG_GROUP_ID menjadi LOGGER_ID
+                    LOGGER_ID,  # Menggunakan LOGGER_ID
                     text=msg,
                     reply_markup=InlineKeyboardMarkup(
                         [[InlineKeyboardButton("Added By", url=button_url)]]
@@ -59,12 +53,10 @@ async def join_watcher(_, message: Message):
                 )
                 print("Log message sent to LOGGER_ID.")
 
-                # Bot bergabung ke grup jika memiliki username publik
                 if username != "Private Chat":
                     await userbot.join_chat(f"{username}")
     except Exception as e:
         print(f"Error in join_watcher: {e}")
-
 
 @app.on_message(filters.left_chat_member)
 async def on_left_chat_member(_, message: Message):
@@ -93,7 +85,7 @@ async def on_left_chat_member(_, message: Message):
                 f"Chat ID: {chat_id}\n\n"
                 f"Removed By: {remove_by}"
             )
-            await app.send_message(LOGGER_ID, text=left)  # Ganti LOG_GROUP_ID menjadi LOGGER_ID
+            await app.send_message(LOGGER_ID, text=left)  # Menggunakan LOGGER_ID
             print("Log message sent to LOGGER_ID.")
 
             await delete_served_chat(chat_id)
