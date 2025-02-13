@@ -1,13 +1,14 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
+# Pastikan LOG_GROUP_ID diganti dengan LOGGER_ID jika sudah diganti di config.py
 from config import LOGGER_ID, LOG
 from AnonXMusic import app
 from AnonXMusic.utils.database import delete_served_chat, get_assistant
 from html import escape
 
 async def is_on_off(log_status):
-    return bool(log_status)
+    return bool(getattr(log_status, "value", False))  # Hindari error jika LOG None
 
 @app.on_message(filters.new_chat_members)
 async def join_watcher(_, message: Message):
@@ -35,31 +36,28 @@ async def join_watcher(_, message: Message):
                 )
 
                 # Validasi URL dengan fallback jika user.id None
-                if message.from_user and message.from_user.id:
-                    button_url = f"tg://user?id={message.from_user.id}"
-                else:
-                    button_url = "#"  # Gunakan URL placeholder
+                button_url = f"tg://user?id={message.from_user.id}" if message.from_user else "#"
 
                 chat_username = f"@{message.chat.username}" if message.chat.username else "no username"
 
                 msg = (
                     f"**Music Bot Added in a New Group #New_Group**\n\n"
-                    f"**Chat Name:** {message.chat.title}\n"  # Nama grup langsung dari chat.title
+                    f"**Chat Name:** {message.chat.title}\n"
                     f"**Chat ID:** {message.chat.id}\n"
                     f"**Chat Username:** {chat_username}\n"
-                    f"**Chat Member Count:** {message.chat.members_count}\n"
+                    f"**Chat Member Count:** {count}\n"
                     f"**Added By:** {added_by}"
                 )
 
                 # Kirim pesan log dengan tombol
                 await app.send_message(
-                    LOG_GROUP_ID,
+                    LOGGER_ID,  # Ganti LOG_GROUP_ID menjadi LOGGER_ID
                     text=msg,
                     reply_markup=InlineKeyboardMarkup(
                         [[InlineKeyboardButton("Added By", url=button_url)]]
                     ),
                 )
-                print("Log message sent to LOG_GROUP_ID.")
+                print("Log message sent to LOGGER_ID.")
 
                 # Bot bergabung ke grup jika memiliki username publik
                 if username != "Private Chat":
@@ -71,7 +69,6 @@ async def join_watcher(_, message: Message):
 @app.on_message(filters.left_chat_member)
 async def on_left_chat_member(_, message: Message):
     try:
-        # Pastikan LOG diaktifkan
         if not await is_on_off(LOG):
             print("LOG is turned off. Skipping on_left_chat_member...")
             return
@@ -96,8 +93,8 @@ async def on_left_chat_member(_, message: Message):
                 f"Chat ID: {chat_id}\n\n"
                 f"Removed By: {remove_by}"
             )
-            await app.send_message(LOG_GROUP_ID, text=left)
-            print("Log message sent to LOG_GROUP_ID.")
+            await app.send_message(LOGGER_ID, text=left)  # Ganti LOG_GROUP_ID menjadi LOGGER_ID
+            print("Log message sent to LOGGER_ID.")
 
             await delete_served_chat(chat_id)
             await userbot.leave_chat(chat_id)
