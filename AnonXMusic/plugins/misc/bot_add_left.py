@@ -2,8 +2,8 @@ from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 from config import LOG_GROUP_ID, LOG
-from MusicIndo import app
-from MusicIndo.utils.database import delete_served_chat, get_assistant
+from AnonXMusic import app
+from AnonXMusic.utils.database import delete_served_chat, get_assistant
 from html import escape
 
 async def is_on_off(log_status):
