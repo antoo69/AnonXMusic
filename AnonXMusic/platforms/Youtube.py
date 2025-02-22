@@ -122,7 +122,9 @@ class YouTubeAPI:
         proc = await asyncio.create_subprocess_exec(
             "yt-dlp",
             "--cookies",
-            "cookies.txt"
+            "cookies.txt",
+            "--sleep-interval", "2",
+            "--max-sleep-interval", "50",
             "-g",
             "-f",
             "best[height<=?720][width<=?1280]",
@@ -142,7 +144,7 @@ class YouTubeAPI:
         if "&" in link:
             link = link.split("&")[0]
         playlist = await shell_cmd(
-            f"yt-dlp --cookies cookies.txt -i --get-id --flat-playlist --playlist-end {limit} --skip-download {link}"
+            f"yt-dlp --cookies cookies.txt -i --get-id --flat-playlist --playlist-end {limit} --skip-download --sleep-interval 2 --max-sleep-interval 50 {link}"
         )
         try:
             result = playlist.split("\n")
@@ -335,6 +337,8 @@ class YouTubeAPI:
                     "yt-dlp",
                     "--cookies",
                     "cookies.txt",
+                    "--sleep-interval", "2",
+                    "--max-sleep-interval", "50",
                     "-g",
                     "-f",
                     "best[height<=?720][width<=?1280]",
