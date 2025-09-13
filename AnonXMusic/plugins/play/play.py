@@ -54,7 +54,7 @@ async def play_commnd(
     url,
     fplay,
 ):
-    stick = await message.reply_sticker("CAADAgADQAADyIsGAAE7MpzFPFQX5QI")
+    stick = await message.reply_sticker("CAACAgUAAxkBAAEE3ploxRHTux8WGtHRZo76vM9DAYFDugACdQ8AApOgUFYSbroamNYXKh4E")
     await asyncio.sleep(random.randint(1, 5))
     await stick.delete()
     mystic = await message.reply(
@@ -665,6 +665,7 @@ async def slider_queries(client, CallbackQuery, _):
         return await CallbackQuery.edit_message_media(
             media=med, reply_markup=InlineKeyboardMarkup(buttons)
         )
+
 
 
 
