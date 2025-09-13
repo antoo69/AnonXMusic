@@ -53,9 +53,7 @@ async def play_commnd(
     url,
     fplay,
 ):
-    stick = await message.reply_sticker(
-        "CAACAgUAAxkDAAEE3kJoxOsNPQP9GUAeVCcJfM4UD-UoKQACWRIAAkxpoVZdtqRB0dJWfx4E",
-        message_thread_id=message.message_thread_id,
+    stick = await message.reply_sticker("CAADAgADQAADyIsGAAE7MpzFPFQX5QI")
     )
     await asyncio.sleep(random.randint(1, 5))
     await stick.delete()
@@ -667,4 +665,5 @@ async def slider_queries(client, CallbackQuery, _):
         return await CallbackQuery.edit_message_media(
             media=med, reply_markup=InlineKeyboardMarkup(buttons)
         )
+
 
