@@ -123,7 +123,6 @@ class YouTubeAPI:
             "yt-dlp",
             "--cookies",
             "cookies.txt",
-            "verbose": True,
             "--sleep-interval", "2",
             "--max-sleep-interval", "50",
             "-g",
@@ -249,7 +248,6 @@ class YouTubeAPI:
         def audio_dl():
             ydl_optssx = {
                 "extractor_args": {"youtube": ["player_client=android"]},
-                "verbose": True,
                 "cookiefile": "cookies.txt",
                 "format": "bestaudio/best",
                 "outtmpl": "downloads/%(id)s.%(ext)s",
