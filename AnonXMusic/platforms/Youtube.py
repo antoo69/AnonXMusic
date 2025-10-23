@@ -247,8 +247,8 @@ class YouTubeAPI:
 
         def audio_dl():
             ydl_optssx = {
-                "extractor_args": {"youtube": ["player_client=android"]},
                 "cookiefile": "cookies.txt",
+                "extractor_args": {"youtube": ["player_client=android"]},
                 "format": "bestaudio/best",
                 "outtmpl": "downloads/%(id)s.%(ext)s",
                 "geo_bypass": True,
@@ -266,8 +266,8 @@ class YouTubeAPI:
 
         def video_dl():
             ydl_optssx = {
-                "extractor_args": {"youtube": ["player_client=android"]},
                 "cookiefile": "cookies.txt",
+                "extractor_args": {"youtube": ["player_client=android"]},
                 "format": "(bestvideo[height<=?720][width<=?1280][ext=mp4])+(bestaudio[ext=m4a])",
                 "outtmpl": "downloads/%(id)s.%(ext)s",
                 "geo_bypass": True,
@@ -287,8 +287,8 @@ class YouTubeAPI:
             formats = f"{format_id}+140"
             fpath = f"downloads/{title}"
             ydl_optssx = {
-                "extractor_args": {"youtube": ["player_client=android"]},
                 "cookiefile": "cookies.txt",
+                "extractor_args": {"youtube": ["player_client=android"]},
                 "format": formats,
                 "outtmpl": fpath,
                 "geo_bypass": True,
@@ -304,8 +304,8 @@ class YouTubeAPI:
         def song_audio_dl():
             fpath = f"downloads/{title}.%(ext)s"
             ydl_optssx = {
-                "extractor_args": {"youtube": ["player_client=android"]},
                 "cookiefile": "cookies.txt",
+                "extractor_args": {"youtube": ["player_client=android"]},
                 "format": format_id,
                 "outtmpl": fpath,
                 "geo_bypass": True,
@@ -333,7 +333,7 @@ class YouTubeAPI:
             fpath = f"downloads/{title}.mp3"
             return fpath
         elif video:
-            if await is_on_off(1):
+            if await is_on_off(config.YTDOWNLOADER):
                 direct = True
                 downloaded_file = await loop.run_in_executor(None, video_dl)
             else:
@@ -341,8 +341,6 @@ class YouTubeAPI:
                     "yt-dlp",
                     "--cookies",
                     "cookies.txt",
-                    "--sleep-interval", "2",
-                    "--max-sleep-interval", "50",
                     "-g",
                     "-f",
                     "best[height<=?720][width<=?1280]",
