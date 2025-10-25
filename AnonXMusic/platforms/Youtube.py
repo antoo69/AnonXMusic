@@ -247,21 +247,16 @@ class YouTubeAPI:
 
         def audio_dl():
             ydl_optssx = {
+                "cookiefile": "cookies.txt",
+                "extractor_args": {"youtube": ["player_client=android"]},
                 "format": "bestaudio/best",
                 "outtmpl": "downloads/%(id)s.%(ext)s",
                 "geo_bypass": True,
-                "noplaylist": True,
                 "nocheckcertificate": True,
                 "quiet": True,
                 "no_warnings": True,
-                "cookiefile": f"{cookies()}",
-                "prefer_ffmpeg": True,
-                "extractor_args": {
-                    "youtube": "player_client=default,web_safari;player_js_version=actual"
-                },
             }
-
-            x = YoutubeDL(ydl_optssx)
+            x = yt_dlp.YoutubeDL(ydl_optssx)
             info = x.extract_info(link, False)
             xyz = os.path.join("downloads", f"{info['id']}.{info['ext']}")
             if os.path.exists(xyz):
@@ -271,21 +266,16 @@ class YouTubeAPI:
 
         def video_dl():
             ydl_optssx = {
+                "cookiefile": "cookies.txt",
+                "extractor_args": {"youtube": ["player_client=android"]},
                 "format": "(bestvideo[height<=?720][width<=?1280][ext=mp4])+(bestaudio[ext=m4a])",
                 "outtmpl": "downloads/%(id)s.%(ext)s",
                 "geo_bypass": True,
-                "noplaylist": True,
                 "nocheckcertificate": True,
                 "quiet": True,
                 "no_warnings": True,
-                "prefer_ffmpeg": True,
-                "cookiefile": f"{cookies()}",
-                "extractor_args": {
-                    "youtube": "player_client=default,web_safari;player_js_version=actual"
-                },
             }
-
-            x = YoutubeDL(ydl_optssx)
+            x = yt_dlp.YoutubeDL(ydl_optssx)
             info = x.extract_info(link, False)
             xyz = os.path.join("downloads", f"{info['id']}.{info['ext']}")
             if os.path.exists(xyz):
@@ -297,31 +287,28 @@ class YouTubeAPI:
             formats = f"{format_id}+140"
             fpath = f"downloads/{title}"
             ydl_optssx = {
+                "cookiefile": "cookies.txt",
+                "extractor_args": {"youtube": ["player_client=android"]},
                 "format": formats,
                 "outtmpl": fpath,
                 "geo_bypass": True,
-                "noplaylist": True,
                 "nocheckcertificate": True,
                 "quiet": True,
                 "no_warnings": True,
                 "prefer_ffmpeg": True,
                 "merge_output_format": "mp4",
-                "cookiefile": f"{cookies()}",
-                "extractor_args": {
-                    "youtube": "player_client=default,web_safari;player_js_version=actual"
-                },
             }
-
-            x = YoutubeDL(ydl_optssx)
+            x = yt_dlp.YoutubeDL(ydl_optssx)
             x.download([link])
 
         def song_audio_dl():
             fpath = f"downloads/{title}.%(ext)s"
             ydl_optssx = {
+                "cookiefile": "cookies.txt",
+                "extractor_args": {"youtube": ["player_client=android"]},
                 "format": format_id,
                 "outtmpl": fpath,
                 "geo_bypass": True,
-                "noplaylist": True,
                 "nocheckcertificate": True,
                 "quiet": True,
                 "no_warnings": True,
@@ -333,13 +320,8 @@ class YouTubeAPI:
                         "preferredquality": "192",
                     }
                 ],
-                "cookiefile": f"{cookies()}",
-                "extractor_args": {
-                    "youtube": "player_client=default,web_safari;player_js_version=actual"
-                },
             }
-
-            x = YoutubeDL(ydl_optssx)
+            x = yt_dlp.YoutubeDL(ydl_optssx)
             x.download([link])
 
         if songvideo:
